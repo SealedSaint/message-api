@@ -1,0 +1,17 @@
+{
+  "name": "message-api",
+  "version": "1.0.0",
+  "description": "A simple api that accepts messages via post, saves them in a store, and can return the stored messages via a get.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "author": "David Clark",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
