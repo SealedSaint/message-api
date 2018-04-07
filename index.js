@@ -1,20 +1,50 @@
 const express = require('express');
+const MongoClient = require('mongodb').MongoClient;
+
+const { db } = require('./config.js');
 
 const app = express();
-
-const messageStore = [];
 
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/messages', (req, res) => {
-  res.json({ messages: messageStore });
+  MongoClient.connect(db.uri, (err, client) => {
+    if (err) { console.error(err); return; }
+
+    const messageCol = client.db('test').collection('messages');
+    messageCol.find().toArray((err, messages) => {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+      } else {
+        console.log('Found messages: ', messages);
+        res.json(messages);
+      }
+
+      client.close();
+    });
+  });
 });
 app.post('/messages', (req, res) => {
   const message = req.body;
-  messageStore.unshift(message);
-  res.sendStatus(201);
+
+  MongoClient.connect(db.uri, (err, client) => {
+    if (err) { console.error(err); return; }
+
+    const messageCol = client.db('test').collection('messages');
+    messageCol.insert(message, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(201);
+      }
+
+      client.close();
+    });
+  });
 });
 
 const port = 3000;
