@@ -4,7 +4,8 @@
   "description": "A simple api that accepts messages via post, saves them in a store, and can return the stored messages via a get.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon",
+    "release": "./bin/release.sh"
   },
   "author": "David Clark",
   "license": "MIT",
