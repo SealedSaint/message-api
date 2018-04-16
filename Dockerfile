@@ -6,6 +6,6 @@ RUN npm install --production
 COPY index.js /app
 COPY config.js /app
 
-CMD node index.js
-
 EXPOSE 3000
+
+CMD node index.js
