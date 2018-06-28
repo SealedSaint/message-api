@@ -13,6 +13,8 @@ if (nodeEnv === 'prod' || nodeEnv === 'production') {
 console.log('Config is:', config);
 const dbURI = config.DB_URI;
 
+const DB_NAME = 'message-logger';
+
 const app = express();
 
 app.use(express.json());
@@ -32,7 +34,7 @@ app.get('/messages', (req, res) => {
   MongoClient.connect(dbURI, (err, client) => {
     if (err) { console.error(err); return; }
 
-    const messageCol = client.db('test').collection('messages');
+    const messageCol = client.db(DB_NAME).collection('messages');
     messageCol.find().toArray((err, messages) => {
       if (err) {
         console.error(err);
@@ -54,7 +56,7 @@ app.post('/messages', (req, res) => {
   MongoClient.connect(dbURI, (err, client) => {
     if (err) { console.error(err); return; }
 
-    const messageCol = client.db('test').collection('messages');
+    const messageCol = client.db(DB_NAME).collection('messages');
     messageCol.insert(message, (err, result) => {
       if (err) {
         console.error(err);
@@ -66,6 +68,15 @@ app.post('/messages', (req, res) => {
       client.close();
     });
   });
+});
+
+// Test DB connection
+MongoClient.connect(dbURI, (err, client) => {
+  if (err) {
+		console.error(err);
+		process.exit(0);
+	}
+  client.close();
 });
 
 const port = 3000;
